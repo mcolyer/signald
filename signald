@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require "date"
+require "rubygems"
+require "bundler/setup"
+require "posix/mqueue"
+require "yaml"
+
+Signal.trap("INT") do
+  exit
+end
+
+queue = POSIX::Mqueue.new("/signald")
+
+config = YAML.load_file("config.yml")
+actions = config["actions"] 
+signals = config["signals"] 
+
+actions.each_pair do |action, attrs|
+end
+
+signals.each_pair do |signal, attrs|
+  IO.popen(["signals/#{attrs["type"]}", signal])
+end
+
+while true do
+  begin
+    puts "#{Time.now} #{queue.timedreceive}"
+  rescue POSIX::Mqueue::QueueEmpty
+    sleep(1)
+  end
+end
