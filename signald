@@ -10,23 +10,42 @@ Signal.trap("INT") do
   exit
 end
 
-queue = POSIX::Mqueue.new("/signald")
-
 config = YAML.load_file("config.yml")
-actions = config["actions"] 
 signals = config["signals"] 
 
-actions.each_pair do |action, attrs|
-end
+signal_config = nil
+signal_name = nil
+is_child = false
 
-signals.each_pair do |signal, attrs|
-  IO.popen(["signals/#{attrs["type"]}", signal])
-end
+signals.each_pair do |name, attrs|
+  child_pid = fork()
+  is_child = !!child_pid
 
-while true do
-  begin
-    puts "#{Time.now} #{queue.timedreceive}"
-  rescue POSIX::Mqueue::QueueEmpty
-    sleep(1)
+  if is_child
+    signal_name = name
+    signal_config = attrs
+    break
   end
 end
+
+if is_child
+  require "./signals/#{signal_config["type"]}"
+  klass = Object.const_get("#{signal_config["type"].capitalize}Signal")
+  signal = klass.new(signal_name, signal_config)
+  signal.watch
+else
+  actions = config["actions"] 
+  actions.each_pair do |action, attrs|
+  end
+
+  queue = POSIX::Mqueue.new("/signald")
+  while true do
+    begin
+      puts "#{Time.now} #{queue.timedreceive}"
+    rescue POSIX::Mqueue::QueueEmpty
+      sleep(1)
+    end
+  end
+end
+
+Process.waitall
