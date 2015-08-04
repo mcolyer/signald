@@ -19,7 +19,7 @@ is_child = false
 
 signals.each_pair do |name, attrs|
   child_pid = fork()
-  is_child = !!child_pid
+  is_child = !child_pid
 
   if is_child
     signal_name = name
