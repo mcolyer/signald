@@ -34,6 +34,7 @@ if is_child
   signal = klass.new(signal_name, signal_config)
   signal.watch
 else
+  $0 = "signald: primary"
   actions = config["actions"] 
   actions.each_pair do |action, attrs|
   end

@@ -2,6 +2,7 @@ class ArpSignal
   def initialize(name, config)
     @name = name
     @config = config
+    $0 = "signald: #{@name}"
   end
 
   def send_signal(bool)
