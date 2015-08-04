@@ -27,9 +27,9 @@ Currently implemented signals:
 
 ### Events
 
-Events allow you to combine multiple signals using logic and they are evaluated
+Events allow you to combine multiple signals using logic which are evaluated
 every time a signal changes state. This allows you to trigger actions when the
-environment changes.
+environment changes in an event based manner.
 
 Note: Events are not yet implemented.
 
