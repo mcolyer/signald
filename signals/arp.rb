@@ -16,10 +16,6 @@ class ArpSignal < BaseSignal
     count = 0
     
     while true do
-      date = DateTime.now
-      date_stamp = date.strftime("%h %d %H:%M:%S")
-      #puts "#{date_stamp} count=#{count} state=#{state}"
-
       present = system("arping", "-i", "eth0", "-qc", "1", mac_address)
     
       if state == :absent && present
