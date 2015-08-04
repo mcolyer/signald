@@ -2,10 +2,34 @@
 
 Using the power of unix for home control.
 
-## Events
+### Getting Started
 
-Describe them.
+```
+git clone git@github.com:mcolyer/signald.git
+cd signald
+bundle install
+cp config.yml.example config.yml
+sudo ./signald
+```
 
-## Signals
+## Concepts
 
-Describe them.
+### Signals
+
+The core of signald is tracking signals. It models all input as a binary
+signal. For example the arp signal is true only when the configured arp
+address is present on the network.
+
+Currently implemented signals:
+- arp - a useful proxy for an individual's presence by tracking their
+  smartphone on your network.
+- sunlight - useful to determine when you should turn your lights on.
+
+### Events
+
+Events allow you to combine multiple signals using logic and they are evaluated
+every time a signal changes state. This allows you to trigger actions when the
+environment changes.
+
+Note: Events are not yet implemented.
+

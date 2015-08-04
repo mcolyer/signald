@@ -1,0 +1,15 @@
+# List the signals you're interested in monitoring
+signals:
+  # Each signal must have a unique name
+  #
+  # Arp signals are useful for tracking the presence of your smartphone on your network.
+  # These settings will detect with iOS8 devices even with their screens blank.
+  arp-ping:
+    type: arp
+    mac_address: <YOUR-PHONES-MAC-ADDRESS>
+    sleep_period: 8 # Ping every 8 seconds
+    maximum_cycles_to_wait: 180 # Wait for half an hour before assuming you've left
+
+  # Knowing whether there is sunlight is useful for know when to turn the lights on.
+  sunlight:
+    type: sunlight
