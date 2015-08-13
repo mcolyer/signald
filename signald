@@ -3,7 +3,7 @@
 require "date"
 require "rubygems"
 require "bundler/setup"
-require "posix/mqueue"
+require "posix_mq"
 require "yaml"
 
 Signal.trap("INT") do
@@ -39,12 +39,15 @@ else
   actions.each_pair do |action, attrs|
   end
 
-  queue = POSIX::Mqueue.new("/signald")
+  queue = POSIX_MQ.new("/signald", :r)
+  mq = queue.to_io
   while true do
-    begin
-      puts "#{Time.now} #{queue.timedreceive}"
-    rescue POSIX::Mqueue::QueueEmpty
-      sleep(1)
+    rs, ws = IO.select([mq], [])
+    if r = rs[0]
+      (0..queue.attr.curmsgs).each do |i|
+        message = queue.receive.first
+        puts "#{Time.now} #{message}"
+      end
     end
   end
 end

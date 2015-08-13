@@ -1,4 +1,4 @@
 source "https://rubygems.org"
 
-gem 'posix-mqueue'
+gem 'posix_mq'
 gem 'RubySunrise'
