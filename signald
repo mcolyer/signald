@@ -35,19 +35,15 @@ if is_child
   signal.watch
 else
   $0 = "signald: primary"
+
   actions = config["actions"] 
   actions.each_pair do |action, attrs|
   end
 
   POSIX_MQ.open("/signald", :r) do |queue|
-    selectable = queue.to_io
     while true do
-      available, = IO.select([selectable])
-      if available[0]
-        (0..queue.attr.curmsgs).each do |i|
-          message = queue.receive.first
-          puts "#{Time.now} #{message}"
-        end
+      if message = queue.receive.first
+        puts "#{Time.now} #{message}"
       end
     end
   end
