@@ -5,6 +5,9 @@ require "rubygems"
 require "bundler/setup"
 require "posix_mq"
 require "yaml"
+require "json"
+
+require "./evaluator"
 
 Signal.trap("INT") do
   exit
@@ -36,14 +39,11 @@ if is_child
 else
   $0 = "signald: primary"
 
-  actions = config["actions"] 
-  actions.each_pair do |action, attrs|
-  end
-
+  evaluator = Evaluator.new(config)
   POSIX_MQ.open("/signald", :r) do |queue|
     while true do
       if message = queue.receive.first
-        puts "#{Time.now} #{message}"
+        evaluator.evaluate(message)
       end
     end
   end
