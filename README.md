@@ -12,6 +12,15 @@ cp config.yml.example config.yml
 sudo ./signald
 ```
 
+#### Without root
+
+This only works if arping is using libnet 1.1.5.
+
+```
+sudo apt-get install libcap2-bin
+sudo setcap cap_net_raw+ep  /usr/sbin/arping
+```
+
 ## Concepts
 
 ### Signals

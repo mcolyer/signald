@@ -2,4 +2,4 @@ language: ruby
 rvm:
  - "2.2.2"
 script:
- - bash test/test-actions.sh
+ - bash tests/test-actions.sh

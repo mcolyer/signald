@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
 
-require "date"
 require "rubygems"
 require "bundler/setup"
+require "date"
+require "optparse"
 require "posix_mq"
+
+# FIXME: Should probably use just one serialization format
 require "yaml"
 require "json"
 
@@ -13,7 +16,16 @@ Signal.trap("INT") do
   exit
 end
 
-config = YAML.load_file("config.yml")
+options = {config_file: "config.yml"}
+OptionParser.new do |opts|
+  opts.banner = "Usage: signald [options]"
+
+  opts.on("-c", "--config-file", "Specify the configuration file") do |v|
+    options[:config_file] = v
+  end
+end.parse!
+
+config = YAML.load_file(options[:config_file])
 signals = config["signals"] 
 
 signal_config = nil
