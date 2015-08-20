@@ -26,7 +26,7 @@ class SunlightSignal < BaseSignal
       end
 
       if prev_state != state
-        send_signal(state)
+        send_signal(@name, state)
         prev_state = state
       end
 

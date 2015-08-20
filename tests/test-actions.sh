@@ -1,10 +1,57 @@
 FULL_PATH=$(cd "$(dirname "$0")"; pwd)
 source $FULL_PATH/lib.sh
 
-begin_test "the thing"
+export SIGNALD_QUEUE="/signald-test"
+
+$FULL_PATH/../signald -c $FULL_PATH/config-actions.yml >/dev/null 2>/dev/null &
+SIGNALD_PID=$!
+
+echo -n "Signald starting ..."
+for i in `seq 15`; do
+  NAME=$(cat /proc/$SIGNALD_PID/cmdline) 
+  if [ "$NAME" == "signald: primary" ]; then
+    break
+  fi
+  sleep 1
+done
+echo "complete"
+
+rm -f /tmp/signal-activated
+
+begin_test "sending a true signal triggers activation"
 (
      set -e
-     echo "hello"
-     false
+     $FULL_PATH/../bin/signald-send -n a -v true
+
+     ret=false
+     for i in `seq 15`; do
+       if [ -f /tmp/signal-activated ]; then
+         ret=true
+         break
+       fi
+       sleep 1
+     done
+     $ret
 )
 end_test
+
+rm -f /tmp/signal-deactivated
+
+begin_test "sending a false signal triggers deactivation"
+(
+     set -e
+     $FULL_PATH/../bin/signald-send -n a -v false
+
+     ret=false
+     for i in `seq 30`; do
+       if [ -f /tmp/signal-deactivated ]; then
+         ret=true
+         break
+       fi
+       sleep 1
+     done
+     $ret
+)
+end_test
+
+kill $SIGNALD_PID >/dev/null 2>/dev/null

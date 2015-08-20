@@ -10,7 +10,7 @@ require "posix_mq"
 require "yaml"
 require "json"
 
-require "./evaluator"
+require_relative "./evaluator"
 
 Signal.trap("INT") do
   exit
@@ -20,13 +20,13 @@ options = {config_file: "config.yml"}
 OptionParser.new do |opts|
   opts.banner = "Usage: signald [options]"
 
-  opts.on("-c", "--config-file", "Specify the configuration file") do |v|
+  opts.on("-cCONFIG", "--config-file=CONFIG", "Specify the configuration file") do |v|
     options[:config_file] = v
   end
 end.parse!
 
 config = YAML.load_file(options[:config_file])
-signals = config["signals"] 
+signals = config["signals"] || {}
 
 signal_config = nil
 signal_name = nil
@@ -52,7 +52,8 @@ else
   $0 = "signald: primary"
 
   evaluator = Evaluator.new(config)
-  POSIX_MQ.open("/signald", :r) do |queue|
+  queue_name = ENV["SIGNALD_QUEUE"] || "/signald"
+  POSIX_MQ.open(queue_name, :rw) do |queue|
     while true do
       if message = queue.receive.first
         evaluator.evaluate(message)

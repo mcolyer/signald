@@ -1,0 +1,7 @@
+actions:
+  occupied:
+    eval: '@signals["a"]'
+    activated:
+      - 'touch /tmp/signal-activated'
+    deactivated:
+      - 'touch /tmp/signal-deactivated'

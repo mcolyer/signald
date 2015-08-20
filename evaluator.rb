@@ -4,7 +4,8 @@ class Evaluator
     @signals = Hash.new(true)
     @state = {}
 
-    config["signals"].each_pair do |name, attrs|
+    signals = config["signals"] || {}
+    signals.each_pair do |name, attrs|
       @signals[name] = !!attrs["initial_state"] if attrs.has_key? "initial_state"
     end
   end

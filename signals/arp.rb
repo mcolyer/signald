@@ -21,10 +21,10 @@ class ArpSignal < BaseSignal
       if state == :absent && present
         count = 0
         state = :present
-        send_signal(true)
+        send_signal(@name, true)
       elsif state == :present && !present && count > maximum_wait_for_signal
         state = :absent
-        send_signal(false)
+        send_signal(@name, false)
       elsif present
         count = 0
       elsif !present
