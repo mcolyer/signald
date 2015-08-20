@@ -1,4 +1,5 @@
-. lib.sh
+FULL_PATH=$(cd "$(dirname "$0")"; pwd)
+source $FULL_PATH/lib.sh
 
 begin_test "the thing"
 (
