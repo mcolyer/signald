@@ -21,7 +21,7 @@ rm -f /tmp/signal-activated
 begin_test "sending a true signal triggers activation"
 (
      set -e
-     $FULL_PATH/../bin/signald-send -n a -v true
+     $FULL_PATH/../bin/signald-send -id=a -value=true
 
      ret=false
      for i in `seq 15`; do
@@ -40,7 +40,7 @@ rm -f /tmp/signal-deactivated
 begin_test "sending a false signal triggers deactivation"
 (
      set -e
-     $FULL_PATH/../bin/signald-send -n a -v false
+     $FULL_PATH/../bin/signald-send -id=a -value=false
 
      ret=false
      for i in `seq 30`; do
