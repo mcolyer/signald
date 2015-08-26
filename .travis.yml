@@ -1,6 +1,5 @@
 language: ruby
 install:
-  - apt-get install golang
   - go build -o bin/signald-send bin/signald-send.go
 rvm:
  - "2.2.2"
