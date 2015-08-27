@@ -8,8 +8,8 @@ SIGNALD_PID=$!
 
 echo -n "Signald starting ..."
 for i in `seq 15`; do
-  NAME=$(cat /proc/$SIGNALD_PID/cmdline) 
-  if [ "$NAME" == "signald: primary" ]; then
+  NAME=$(ps -p $SIGNALD_PID -o command)
+  if [[ "$NAME" =~ signald:\ primary.* ]]; then
     break
   fi
   sleep 1
