@@ -1,5 +1,6 @@
 language: ruby
-install:
+cache: bundler
+before_install:
   - go build -o bin/signald-send bin/signald-send.go
 rvm:
  - "2.2.2"
