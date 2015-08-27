@@ -3,7 +3,7 @@ source $FULL_PATH/lib.sh
 
 export SIGNALD_QUEUE="/signald-test"
 
-$FULL_PATH/../signald -c $FULL_PATH/config-actions.yml >/dev/null 2>/dev/null &
+$FULL_PATH/../signald -c $FULL_PATH/config-actions.yml
 SIGNALD_PID=$!
 
 set -x
