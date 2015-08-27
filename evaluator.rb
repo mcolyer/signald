@@ -21,12 +21,12 @@ class Evaluator
         if new_state
           puts "#{name}: Executing activation commands"
           (attrs["activated"] || []).each do |command|
-            system(command)
+            system({"RUBYOPT" => nil, "GEM_HOME" => nil, "GEM_PATH" => nil, "BUNDLE_BIN_PATH" => nil, "BUNDLE_GEMFILE" => nil}, command)
           end
         else
           puts "#{name}: Executing deactivation commands"
           (attrs["deactivated"] || []).each do |command|
-            system(command)
+            system({"RUBYOPT" => nil, "GEM_HOME" => nil, "GEM_PATH" => nil, "BUNDLE_BIN_PATH" => nil, "BUNDLE_GEMFILE" => nil}, command)
           end
         end
         @state[name] = new_state
