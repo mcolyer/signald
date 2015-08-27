@@ -6,6 +6,7 @@ export SIGNALD_QUEUE="/signald-test"
 $FULL_PATH/../signald -c $FULL_PATH/config-actions.yml >/dev/null 2>/dev/null &
 SIGNALD_PID=$!
 
+set -x
 echo -n "Signald starting ..."
 for i in `seq 15`; do
   NAME=$(ps -p $SIGNALD_PID -o command)
